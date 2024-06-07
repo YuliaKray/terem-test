@@ -4,8 +4,16 @@ const textElement = document.querySelector('p');
 
 
 // Функция для ассинхронного отправления GET-запроса
-function api() {
-    return fetch(`/api/form`, {
+function api(data) {
+
+    let url = ''; // переменная для url запроса
+    for (const key of Object.keys(data)) {
+        url = url + `${key}=${data[key]}&`;
+    };
+
+    url = url.slice(0, url.length-1); // для удаление последнего & в строке 
+
+    return fetch(`?${url}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'text/plain'
@@ -13,13 +21,13 @@ function api() {
     })
         .then((res) => {
             if (res.ok) {
-                return res.json();
+                return res;
             } else {
                 return Promise.reject(`Ошибка: ${res.status}`);
             }
         })
         .then((res) => {
-            alert(res);
+            alert('Данные отправились');
         })
         .catch((err) => {
             alert(err);
@@ -33,7 +41,7 @@ function submitForm(event) {
     const data = new FormData(formElement);
     const values = Object.fromEntries(data.entries());
 
-    api();
+    api(values);
     textElement.textContent = JSON.stringify(values); 
 };
 
