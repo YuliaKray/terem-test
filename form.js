@@ -6,12 +6,8 @@ const textElement = document.querySelector('p');
 // Функция для ассинхронного отправления GET-запроса
 function api(data) {
 
-    let url = ''; // переменная для url запроса
-    for (const key of Object.keys(data)) {
-        url = url + `${key}=${data[key]}&`;
-    };
-
-    url = url.slice(0, url.length-1); // для удаление последнего & в строке 
+    const params = new URLSearchParams(data);
+    const url = params.toString();
 
     return fetch(`?${url}`, {
         method: 'GET',
